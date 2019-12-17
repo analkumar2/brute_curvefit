@@ -3,7 +3,7 @@
 
 __author__           = "Anal Kumar"
 __copyright__        = "Copyright 2019-, Anal Kumar"
-__version__          = "1.0.0"
+__version__          = "0.0.1"
 __maintainer__       = "Anal Kumar"
 __email__            = "analkumar2@gmail.com"
 
