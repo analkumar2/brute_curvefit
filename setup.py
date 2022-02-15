@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="brute_curvefit", # Replace with your own username
-    version="0.0.3",
+    version="0.0.5",
     author="Anal Kumar",
     author_email="analkumar2@gmail.com",
     description="Curve fitting using both brute force and scipy.optimize",
