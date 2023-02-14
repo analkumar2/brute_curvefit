@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="brute_curvefit", # Replace with your own username
-    version="0.0.5",
+    version="0.0.7",
     author="Anal Kumar",
     author_email="analkumar2@gmail.com",
     description="Curve fitting using both brute force and scipy.optimize",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/analkumar2/brute_force",
+    url="https://github.com/analkumar2/brute_curvefit",
     packages = [ "brute_curvefit" ],
     package_dir = { "brute_curvefit" : 'brute_curvefit' },
     classifiers=[
