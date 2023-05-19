@@ -139,8 +139,8 @@ def bruteforce(
                 print(f"error = {error}")
             paramlist.append(currparam)
             errorlist.append(error)
-            print(k / ntol, end="\r")
-        print("    ")
+        #     print(k / ntol, end="\r")
+        # print("    ")
 
         best_error_idx = np.argsort(errorlist)[:returnn]
         best_params = np.array(paramlist)[best_error_idx]
@@ -271,8 +271,8 @@ def scipy_fit(
                 error_list.append(error)
             except RuntimeError:
                 print("RuntimeError")
-            print(k / len(p0list), end="\r")
-        print("     ")
+        #     print(k / len(p0list), end="\r")
+        # print("     ")
         best_error_idx = np.array(error_list).argmin()
         best_param = np.array(fitparams_list)[best_error_idx]
         # print('timetaken', time()-starttime)
@@ -329,8 +329,8 @@ def scipy_minimize(
         error = fittedy.fun
         fitparams_list.append(fittedy.x)
         error_list.append(error)
-        print(k / len(p0list), end="\r")
-    print("    ")
+    #     print(k / len(p0list), end="\r")
+    # print("    ")
     best_error_idx = np.array(error_list).argmin()
     best_param = np.array(fitparams_list)[best_error_idx]
     if savetofile != False:
@@ -507,8 +507,8 @@ def scipy_bashop(
             print(f"error = {error}")
         fitparams_list.append(fittedy.x)
         error_list.append(error)
-        print(k / len(p0list), end="\r")
-    print("    ")
+    #     print(k / len(p0list), end="\r")
+    # print("    ")
     best_error_idx = np.array(error_list).argmin()
     best_param = np.array(fitparams_list)[best_error_idx]
     if savetofile != False:
