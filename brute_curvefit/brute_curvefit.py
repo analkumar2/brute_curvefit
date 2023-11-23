@@ -3,7 +3,7 @@
 
 __author__ = "Anal Kumar"
 __copyright__ = "Copyright 2019-, Anal Kumar"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __maintainer__ = "Anal Kumar"
 __email__ = "analkumar2@gmail.com"
 
@@ -15,6 +15,7 @@ from scipy.optimize import Bounds
 import matplotlib.pyplot as plt
 from time import time
 from multiprocessing import Pool
+import multiprocessing as mp
 import os
 import sys
 import pickle
@@ -49,6 +50,7 @@ def bruteforce(
     restrict is list of two lists of the form [[minA, minB, minC],[maxA, maxB, maxC]] where minI and maxI are the minimum and maximum value parameter I can take
     ntol is the number of times the func will be run with different values of the parameters.
     returnnfactor is the fraction of the random models which will be returned in increasing order of 'fitness'
+    parallel arguement specifies how many cores to use. If it is 0 or False, parallelization is not used. If it is an integer, that many number of cores are used. If it is float, that proportion of total cores available are used.
     savetofile to save the output to a textfile
 
     returns the ntol*returnnfactor best models, and their errors
@@ -81,7 +83,15 @@ def bruteforce(
             paramlist.append(currparam)
             args_list.append([list(x), *list(currparam)])
 
-        pool = Pool(processes=int(os.cpu_count()*2/4))
+        if type(parallel)==float:
+            pool = mp.Pool(int(mp.cpu_count()*parallel))
+        elif type(parallel)==int:
+            pool = mp.Pool(parallel)
+        elif type(parallel)==bool:
+            pool = mp.Pool(mp.cpu_count())
+        else:
+            raise Exception("parallel must be either int or float")
+        print(f'{pool} cores being opened')
         A = pool.map(
             funcnorm_par,
             zip(
@@ -197,6 +207,7 @@ def scipy_fit(
     restrict is list of two lists of the form [[minA, minB, minC],[maxA, maxB, maxC]] where minI and maxI are the minimum and maximum value parameter I can take
     p0list is the initial values around which the local minima will be find out by this function. Give many such values and the function will calculate local minima around all those values.
     maxfev is the the maximum number of calls to the function by curve_fit
+    parallel arguement specifies how many cores to use. If it is 0 or False, parallelization is not used. If it is an integer, that many number of cores are used. If it is float, that proportion of total cores available are used.
 
     returns the best model, and its error
     """
@@ -215,7 +226,15 @@ def scipy_fit(
         def funcnorm(*args):
             return (func(*args) - ymin) / yrange
 
-        pool = Pool(processes=int(os.cpu_count()*2/4))
+        if type(parallel)==float:
+            pool = mp.Pool(int(mp.cpu_count()*parallel))
+        elif type(parallel)==int:
+            pool = mp.Pool(parallel)
+        elif type(parallel)==bool:
+            pool = mp.Pool(mp.cpu_count())
+        else:
+            raise Exception("parallel must be either int or float")
+        print(f'{pool} cores being opened')
         A = pool.map(
             scipy_fit_parhelper,
             zip(
@@ -357,6 +376,7 @@ def brute_scifit(
     restrict is list of two lists of the form [[minA, minB, minC],[maxA, maxB, maxC]] where minI and maxI are the minimum and maximum value parameter I can take
     ntol is the number of times the func will be run with different values of the parameters.
     returnnfactor is the fraction of the random models which will be returned in increasing order of 'fitness'
+    parallel arguement specifies how many cores to use. If it is 0 or False, parallelization is not used. If it is an integer, that many number of cores are used. If it is float, that proportion of total cores available are used.
 
     returns the best model, and its error
     """
@@ -525,7 +545,7 @@ if __name__ == "__main__":
     v = np.linspace(-0.100, 0.100, 3000)
     hinf = h(v, -0.050, -0.004)
     plt.plot(v, hinf, label="original")
-    paramsfitted, errors = bruteforce(h, v, hinf, restrict=[[-1, -1], [1, 1]])
+    paramsfitted, errors = bruteforce(h, v, hinf, restrict=[[-1, -1], [1, 1]], parallel=5)
     for param in paramsfitted:
         plt.plot(v, h(v, *param), label="fitted")
     plt.legend()
@@ -533,7 +553,7 @@ if __name__ == "__main__":
 
     plt.plot(v, hinf, label="original")
     paramfitted, error = scipy_fit(
-        h, v, hinf, restrict=[[-1, -1], [1, 1]], p0list=paramsfitted
+        h, v, hinf, restrict=[[-1, -1], [1, 1]], p0list=paramsfitted, parallel=5
     )
     plt.plot(v, h(v, *paramfitted), label="fitted")
     plt.legend()
