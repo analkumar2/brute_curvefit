@@ -20,6 +20,7 @@ import os
 import sys
 import pickle
 import pprint
+from tqdm import tqdm
 
 
 def funcnorm_par(func_args_ymin_yrange):
