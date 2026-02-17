@@ -251,10 +251,11 @@ def scipy_fit(
             ),
         )
         for a in A:
-            fittedparam = a[0]
-            error = a[1]
-            fitparams_list.append(fittedparam)
-            error_list.append(error)
+            if a is not None and len(a) >= 2 and a[0] is not None:
+                fittedparam = a[0]
+                error = a[1]
+                fitparams_list.append(fittedparam)
+                error_list.append(error)
         pool.terminate()
 
         best_error_idx = np.array(error_list).argmin()
